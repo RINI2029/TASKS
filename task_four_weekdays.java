@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class weekdays
+class task_four_weekdays
 {
     public static void main(String[] args)
     {
