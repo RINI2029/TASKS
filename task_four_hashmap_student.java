@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class hashmap_student
+public class task_four_hashmap_student
 {
     private final HashMap<String, Integer> studentGrades = new HashMap<>();
     public void addStudent(String name, int grade)
