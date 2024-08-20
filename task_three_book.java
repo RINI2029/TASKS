@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Book
+public class task_three_ook
 {
     private int bookId;
     private String author;
