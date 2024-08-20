@@ -1,0 +1,25 @@
+
+<html lang="en">
+<head>
+
+    <title>Contact Us Form with Employee Type</title>
+</head>
+<body>
+
+    <h2>Contact Us</h2>
+    <form action="/submit" method="POST">
+        <!-- Other fields can go here -->
+
+        <label>Employee Type:</label><br>
+        <input type="radio" id="salaried" name="employee_type" value="Salaried" required>
+        <label for="salaried">Salaried</label><br>
+
+        <input type="radio" id="own_business" name="employee_type" value="Own Business" required>
+        <label for="own_business">Own Business</label><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
+
