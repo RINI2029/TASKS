@@ -1,0 +1,209 @@
+1. Create the Product Entity
+
+package com.example.productcatalog.entity;
+import javax.persistence.*;
+@Entity
+@Table(name = "products")
+public class Product 
+{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private Double price;
+    private String category;
+
+    public Product() {}
+
+    public Product(String name, Double price, String category)
+    {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    public Long getId() 
+    {
+        return id;
+    }
+
+    public void setId(Long id) 
+    {
+        this.id = id;
+    }
+
+    public String getName() 
+    {
+        return name;
+    }
+
+    public void setName(String name) 
+    {
+        this.name = name;
+    }
+
+    public Double getPrice() 
+    {
+        return price;
+    }
+
+    public void setPrice(Double price) 
+    {
+        this.price = price;
+    }
+
+    public String getCategory() 
+    {
+        return category;
+    }
+
+    public void setCategory(String category) 
+    {
+        this.category = category;
+    }
+}
+
+
+2. Create the Product Repository
+
+package com.example.productcatalog.repository;
+import com.example.productcatalog.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+public interface ProductRepository extends JpaRepository<Product, Long>
+{
+    List<Product> findByCategory(String category);
+}
+
+
+3. Create the Product Controller
+
+package com.example.productcatalog.controller;
+import com.example.productcatalog.entity.Product;
+import com.example.productcatalog.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+@Controller
+public class ProductController 
+{
+    @Autowired
+    private ProductRepository productRepository;
+    @GetMapping("/")
+    public String index() 
+    {
+        return "index"; 
+    }
+    @GetMapping("/addProduct")
+    public String showAddProductForm(Model model) 
+    {
+        model.addAttribute("product", new Product());
+        return "addProduct"; 
+    }
+    @PostMapping("/addProduct")
+    public String addProduct(@ModelAttribute Product product) 
+    {
+        productRepository.save(product);
+        return "redirect:/"; // Redirect to the main page after saving
+    }
+    @GetMapping("/displayProducts")
+    public String displayProducts(Model model) 
+    {
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "displayProducts"; 
+    }
+    @GetMapping("/productsByCategory")
+    public String getProductsByCategory(@RequestParam("category") String category, Model model) 
+    {
+        List<Product> products = productRepository.findByCategory(category);
+        model.addAttribute("products", products);
+        return "displayProducts";
+    }
+}
+
+
+4. HTML Templates (Using Thymeleaf)
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Catalog</title>
+</head>
+<body>
+    <h1>Product Catalog</h1>
+    <button onclick="location.href='/addProduct'">Add Product</button>
+    <button onclick="location.href='/displayProducts'">Display Products</button>
+</body>
+</html>
+addProduct.html
+html
+Copy code
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add a New Product</h1>
+    <form action="/addProduct" method="post" th:object="${product}">
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" required><br>
+        <label>Price:</label>
+        <input type="number" step="0.01" th:field="*{price}" required><br>
+        <label>Category:</label>
+        <input type="text" th:field="*{category}" required><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
+displayProducts.html
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${product.category}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+5. Application Properties
+
+spring.datasource.url=jdbc:mysql://localhost:3306/product_catalog
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+6. Main Application Class
+
+package com.example.productcatalog;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
+public class ProductCatalogApplication 
+{
+    public static void main(String[] args)
+    {
+        SpringApplication.run(ProductCatalogApplication.class, args);
+    }
+}
