@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class task_five_uppercase
+public class string_uppercase
 {
     public static void main(String[] args)
     {
