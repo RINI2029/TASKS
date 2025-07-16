@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
-public class task_five_age_calc
+public class age_calc
 {
     public static void main(String[] args)
     {
