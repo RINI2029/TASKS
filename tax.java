@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class task_three_tax
+public class tax
 {
     public interface Taxable
     {
